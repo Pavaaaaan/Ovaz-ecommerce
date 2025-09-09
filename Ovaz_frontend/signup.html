@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 40px 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .input-group i {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #007bff;
+      cursor: pointer;
+    }
+
+    .password-tips {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      padding-left: 5px;
+    }
+
+    .strength {
+      height: 6px;
+      border-radius: 4px;
+      background: #e0e0e0;
+      margin: 4px 0 14px;
+      transition: width 0.3s ease;
+    }
+
+    .strength.weak { background: #dc3545; width: 33%; }
+    .strength.medium { background: #ffc107; width: 66%; }
+    .strength.strong { background: #28a745; width: 100%; }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .switch a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .switch a:hover {
+      text-decoration: underline;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 15px 20px;
+      background: #333;
+      color: white;
+      border-radius: 6px;
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success { background: #28a745; }
+    .toast.error { background: #dc3545; }
+
+    @media (max-width: 420px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      .input-group input {
+        font-size: 14px;
+        padding: 10px 36px 10px 12px;
+      }
+
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <div class="input-group">
+        <input type="text" id="name" name="name" placeholder="Full Name" required />
+      </div>
+
+      <div class="input-group">
+        <input type="email" id="email" name="email" placeholder="Email Address" required />
+      </div>
+
+      <div class="input-group">
+        <input type="password" id="password" name="password" placeholder="Create Password" required oninput="checkStrength()" />
+        <i class="toggle-password" onclick="togglePassword()">👁️</i>
+      </div>
+      <div id="strengthBar" class="strength"></div>
+
+      <div class="password-tips">
+        🔐 Must include at least 8 characters, uppercase, lowercase, and number.
+      </div>
+
+      <button type="submit">Sign Up</button>
+      <div class="switch">
+        Already have an account? <a href="login.html">Login here</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function togglePassword() {
+      const password = document.getElementById("password");
+      const toggle = document.querySelector(".toggle-password");
+      if (password.type === "password") {
+        password.type = "text";
+        toggle.textContent = "🙈";
+      } else {
+        password.type = "password";
+        toggle.textContent = "👁️";
+      }
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => toast.className = "toast", 3000);
+    }
+
+    function checkStrength() {
+      const password = document.getElementById("password").value;
+      const strengthBar = document.getElementById("strengthBar");
+      strengthBar.className = "strength";
+
+      const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+      const medium = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
+      if (strong.test(password)) {
+        strengthBar.classList.add("strong");
+      } else if (medium.test(password)) {
+        strengthBar.classList.add("medium");
+      } else if (password.length > 0) {
+        strengthBar.classList.add("weak");
+      }
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!name || !email || !password) {
+        showToast("Please fill in all fields.", "error");
+        return;
+      }
+
+      try {
+        const res = await axios.post("http://localhost:5000/signup", {
+          name,
+          email,
+          password
+        });
+
+        console.log("Response:", res.data);
+        showToast("Signup successful! Redirecting...");
+        setTimeout(() => window.location.href = "login.html", 1500);
+      } catch (err) {
+        console.error("Error:", err.response);
+        showToast(err.response?.data?.error || "Signup failed.", "error");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .product-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .price {
+            font-size: 20px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .add-to-cart {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="product-image">
+            <img id="productImg" src="" alt="Product Image">
+        </div>
+        <h1 id="productName"></h1>
+        <p class="price" id="productPrice"></p>
+        <p id="productDesc"></p>
+        
+        <label>Size:</label>
+        <select id="productSize"></select>
+        
+        <label>Color:</label>
+        <select id="productColor"></select>
+
+        <label>Quantity:</label>
+        <input type="number" id="productQuantity" value="1" min="1">
+
+        <button class="add-to-cart">Add to Cart</button>
+
+        <div class="reviews">
+            <h3>Reviews</h3>
+            <p id="productReviews"></p>
+        </div>
+    </div>
+
+    <script>
+        // Dummy product data (replace this with API or database fetch)
+        const products = {
+            1: {
+                name: "Men's T-Shirt",
+                image: "images/product1.jpg",
+                price: "Rs 999",
+                description: "Comfortable and stylish",
+                sizes: ["S", "M", "L"],
+                colors: ["White", "Black", "Green"],
+                reviews: "⭐⭐⭐⭐⭐ - Excellent quality!"
+            },
+            2: {
+                name: "Women's Dress",
+                image: "images/product2.jpg",
+                price: "Rs 1499",
+                description: "Elegant and trendy",
+                sizes: ["S", "M", "L", "XL"],
+                colors: ["Red", "Blue", "Black"],
+                reviews: "⭐⭐⭐⭐ - Worth the price!"
+            }
+        };
+
+        // Get Product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        // Get elements
+        const productImg = document.getElementById("productImg");
+        const productName = document.getElementById("productName");
+        const productPrice = document.getElementById("productPrice");
+        const productDesc = document.getElementById("productDesc");
+        const productSize = document.getElementById("productSize");
+        const productColor = document.getElementById("productColor");
+        const productReviews = document.getElementById("productReviews");
+
+        // Load product details
+        if (products[productId]) {
+            const product = products[productId];
+            productImg.src = product.image;
+            productName.textContent = product.name;
+            productPrice.textContent = product.price;
+            productDesc.textContent = product.description;
+
+            // Populate sizes
+            product.sizes.forEach(size => {
+                let option = document.createElement("option");
+                option.textContent = size;
+                productSize.appendChild(option);
+            });
+
+            // Populate colors
+            product.colors.forEach(color => {
+                let option = document.createElement("option");
+                option.textContent = color;
+                productColor.appendChild(option);
+            });
+
+            // Load reviews
+            productReviews.textContent = product.reviews;
+        } else {
+            document.querySelector(".container").innerHTML = "<h2>Product Not Found</h2>";
+        }
+    </script>
+
+</body>
+</html>

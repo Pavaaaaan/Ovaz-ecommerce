@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+  <style>
+    body { font-family: 'Segoe UI'; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f4f4f4; }
+    .form { background: #fff; padding: 30px; border-radius: 10px; width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .form input, .form button { width: 100%; padding: 10px; margin: 10px 0; }
+    .form button { background: #28a745; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="form">
+    <h3>Reset Password</h3>
+    <input type="password" id="newPassword" placeholder="New password" required />
+    <button onclick="submitNewPassword()">Reset Password</button>
+    <p id="msg"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    async function submitNewPassword() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+      const newPassword = document.getElementById("newPassword").value;
+
+      try {
+        const res = await axios.post("http://localhost:5000/api/auth/reset-password", {
+          token,
+          newPassword: newPassword
+
+        });
+        document.getElementById("msg").innerText = res.data.message;
+      } catch (err) {
+        document.getElementById("msg").innerText = err.response?.data?.error || "Reset failed.";
+      }
+    }
+  </script>
+</body>
+</html>

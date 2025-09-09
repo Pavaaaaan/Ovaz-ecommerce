@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ovaz Shop Screen</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/shop.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="home.html">Ovaz</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-store"></i> Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-box-open"></i> Orders</a>
+                    </li>
+                </ul>
+
+                <!-- Search Bar -->
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search products">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <!-- Quick Links -->
+                <div class="ms-3">
+                    <a href="cart.html" class="btn btn-outline-light me-2"><i class="fas fa-shopping-cart"></i></a>
+                    <a href="login.html" class="btn btn-outline-light"><i class="fas fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Store Section -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Filters Section (Left) -->
+            <div class="col-md-3 order-first">
+                <div class="border p-3 rounded bg-light position-sticky" style="top: 10px;">
+                    <h3>Filters</h3>
+                    <h4>Category</h4>
+                    <label class="d-block"><input type="checkbox" name="category" value="men"> Men's Clothing</label>
+                    <label class="d-block"><input type="checkbox" name="category" value="women"> Women's Clothing</label>
+                    <label class="d-block"><input type="checkbox" name="category" value="accessories"> Accessories</label>
+
+                    <h4 class="mt-3">Size</h4>
+                    <label class="d-block"><input type="checkbox" name="size" value="s"> Small</label>
+                    <label class="d-block"><input type="checkbox" name="size" value="m"> Medium</label>
+                    <label class="d-block"><input type="checkbox" name="size" value="l"> Large</label>
+
+                    <h4 class="mt-3">Color</h4>
+                    <label class="d-block"><input type="checkbox" name="color" value="White"> White</label>
+                    <label class="d-block"><input type="checkbox" name="color" value="Black"> Black</label>
+                    <label class="d-block"><input type="checkbox" name="color" value="Green"> Green</label>
+                    <label class="d-block"><input type="checkbox" name="color" value="Yellow"> Yellow</label>
+
+                    <h4 class="mt-3">Price Range</h4>
+                    <label class="d-block"><input type="radio" name="price" value="399-499"> Rs 399 - Rs 499</label>
+                    <label class="d-block"><input type="radio" name="price" value="599-999"> Rs 599 - Rs 999</label>
+                    <label class="d-block"><input type="radio" name="price" value="1099-1499"> Rs 1099 - Rs 1499</label>
+                    <label class="d-block"><input type="radio" name="price" value="1500-2000"> Rs 1500 - Rs 2000</label>
+
+                    <button class="btn btn-primary w-100 mt-3" id="applyFilters">Apply Filters</button>
+                    <button class="btn btn-danger w-100 mt-2" id="resetFilters">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- Product Listing (Right) -->
+            <div class="col-md-9">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="productsContainer">
+                    <!-- Products will be loaded via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-1">&copy; 2025 Ovaz. All rights reserved.</p>
+        <a href="home.html" class="text-white me-3">Back to Home</a>
+        <a href="shop.html" class="text-white">Back to Shop</a>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="scripts/shop.js"></script>
+</body>
+</html>

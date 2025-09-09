@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway - Ovaz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/payment.css">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="home.html">Ovaz</a>
+      
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html"><i class="fas fa-store"></i> Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link protected-link" href="orders.html"><i class="fas fa-box-open"></i> Orders</a>
+              </li>
+              <li class="nav-item">
+               
+              </li>
+            </ul>
+      
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search products">
+              <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+      
+            <div class="ms-3" id="authButtons">
+              <!-- Buttons added dynamically -->
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <script>
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        const authButtons = document.getElementById('authButtons');
+      
+        if (user) {
+          authButtons.innerHTML = `
+            <button class="btn btn-outline-light me-2" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
+            <button class="btn btn-outline-light me-2" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+            <button class="btn btn-outline-danger me-2" onclick="logout()">Logout</button>
+            <button class="btn btn-outline-secondary" onclick="location.href='settings.html'"><i class="fas fa-cog"></i></button>
+          `;
+        } else {
+          authButtons.innerHTML = `
+            <a href="login.html" class="btn btn-outline-light me-2"><i class="fas fa-user"></i> Login</a>
+          `;
+        }
+      
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          location.href = "login.html";
+        }
+      
+        document.querySelectorAll('.protected-link').forEach(link => {
+          link.addEventListener('click', function (e) {
+            if (!user) {
+              e.preventDefault();
+              alert('Please log in to access this page.');
+              window.location.href = 'login.html';
+            }
+          });
+        });
+      </script>
+    <div class="main-content">
+        <div class="payment-container">
+            <h1>Payment Gateway</h1>
+
+            <!-- Payment Methods -->
+            <h2>Select Payment Method</h2>
+            <div class="payment-methods">
+                <div class="payment-method selected" data-method="card">
+                    <i class="far fa-credit-card"></i>
+                    <p>Credit/Debit Card</p>
+                </div>
+                <div class="payment-method" data-method="paypal">
+                    <i class="fab fa-cc-paypal"></i>
+                    <p>PayPal</p>
+                </div>
+                <div class="payment-method" data-method="upi">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>UPI</p>
+                </div>
+            </div>
+
+            <!-- Card Payment Form (shown by default) -->
+            <div class="payment-form" id="card-form">
+                <div class="form-group">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                
+                <div class="form-group">
+                    <label for="card-name">Name on Card</label>
+                    <input type="text" id="card-name" placeholder="John Doe">
+                </div>
+                
+                <div class="card-details">
+                    <div class="form-group">
+                        <label for="expiry-date">Expiry Date</label>
+                        <input type="text" id="expiry-date" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PayPal Form (hidden by default) -->
+            <div class="payment-form" id="paypal-form" style="display: none;">
+                <p>You will be redirected to PayPal to complete your payment securely.</p>
+                <button type="button" class="confirm-payment" style="background-color: #003087;">
+                    <i class="fab fa-paypal"></i> Pay with PayPal
+                </button>
+            </div>
+
+            <!-- UPI Form (hidden by default) -->
+            <div class="payment-form" id="upi-form" style="display: none;">
+                <div class="form-group">
+                    <label for="upi-id">UPI ID</label>
+                    <input type="text" id="upi-id" placeholder="yourname@upi">
+                </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="promo-code">
+                <input type="text" id="promo-code" placeholder="Enter promo code">
+                <button type="button" id="apply-promo">Apply</button>
+            </div>
+
+            <!-- Order Review -->
+            <h2>Order Summary</h2>
+            <div class="order-review">
+                <div id="order-items">
+                    <!-- Order items will be inserted here -->
+                </div>
+                <div class="order-total">
+                    <span>Total Amount:</span>
+                    <span id="cartTotal">Rs 0</span>
+                </div>
+            </div>
+
+            <!-- Security Info -->
+            <div class="security-info">
+                <i class="fas fa-lock"></i>
+                <span>Your payment is secure and encrypted</span>
+            </div>
+
+            <!-- Confirm Payment Button -->
+            <button class="confirm-payment" id="confirm-payment">Confirm Payment</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Ovaz. All rights reserved.</p>
+        <a href="help.html">Help & Support</a>
+        <a href="contact.html">Contact Us</a>
+    </footer>
+
+    <script src="scripts/payment.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    :root {
+      --bg-color: #f4f4f4;
+      --form-bg: #fff;
+      --text-color: #333;
+      --input-bg: #fff;
+      --input-border: #ccc;
+      --primary-color: #007bff;
+      --primary-dark: #0056b3;
+      --success-color: #28a745;
+      --error-color: #dc3545;
+      --toast-bg: #333;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: linear-gradient(to right, #6a11cb, #2575fc);
+        --form-bg: white;
+        --text-color: black;
+        --input-bg: white;
+        --input-border: #444;
+        --primary-color: #66b2ff;
+        --primary-dark: #3399ff;
+        --toast-bg: #222;
+      }
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .form-container {
+      background: var(--form-bg);
+      padding: 30px 25px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 320px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .form-container.shake {
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .form-group input {
+      width: 90%;
+      padding: 10px 12px;
+      padding-top: 18px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-color);
+      border-radius: 6px;
+      font-size: 13px;
+      transition: border 0.3s;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-size: 13px;
+      color: #999;
+      pointer-events: none;
+      transition: 0.2s ease all;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+      top: -8px;
+      left: 10px;
+      font-size: 11px;
+      background: var(--form-bg);
+      padding: 0 4px;
+      color: var(--primary-color);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--primary-color);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary-color);
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .switch {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .switch a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--toast-bg);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 6px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      background: var(--success-color);
+    }
+
+    .toast.error {
+      background: var(--error-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container" id="loginForm">
+    <h2>Login</h2>
+
+    <div class="form-group">
+      <input type="email" id="email" placeholder=" " required />
+      <label for="email">Email</label>
+    </div>
+
+    <div class="form-group password-wrapper">
+      <input type="password" id="password" placeholder=" " required />
+      <label for="password">Password</label>
+      <span class="toggle-password" onclick="togglePassword()">👁️</span>
+    </div>
+
+    <a href="#">forgot password? Click here!</a>
+
+    <button onclick="handleLogin()" id="loginBtn">
+      <span id="loginText">Login</span>
+    </button>
+    
+    
+
+    <div class="switch">
+      Don't have an account? <a href="signup.html">Sign up</a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function togglePassword() {
+      const password = document.getElementById("password");
+      const toggle = document.querySelector(".toggle-password");
+      if (password.type === "password") {
+        password.type = "text";
+        toggle.textContent = "🙈";
+      } else {
+        password.type = "password";
+        toggle.textContent = "👁️";
+      }
+    }
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.className = `toast show ${type}`;
+      setTimeout(() => toast.className = "toast", 3000);
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const btn = document.getElementById("loginBtn");
+      const loginText = document.getElementById("loginText");
+      const form = document.getElementById("loginForm");
+
+      if (!email || !password) {
+        showToast("Please enter both email and password.", "error");
+        form.classList.add("shake");
+        setTimeout(() => form.classList.remove("shake"), 400);
+        return;
+      }
+
+      try {
+        btn.disabled = true;
+        loginText.innerHTML = `<div class="spinner"></div>`;
+
+        const res = await axios.post("http://localhost:5000/api/auth/login", {
+          email, password
+        }, {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true
+        });
+
+        const user = res.data.user;
+        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+        showToast("Login successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "home.html";
+        }, 1000);
+
+      } catch (err) {
+        showToast(err.response?.data?.error || "Login failed.", "error");
+        form.classList.add("shake");
+        setTimeout(() => form.classList.remove("shake"), 400);
+      } finally {
+        btn.disabled = false;
+        loginText.textContent = "Login";
+      }
+    }
+  </script>
+</body>
+</html>

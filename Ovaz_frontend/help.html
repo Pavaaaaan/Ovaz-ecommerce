@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ovaz Help Screen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+ 
+    <link rel="stylesheet" href="css/help.css">
+
+</head>
+<body>
+    <!-- Navbar -->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="home.html">Ovaz</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link " href="home.html"><i class="fas fa-home"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="shop.html"><i class="fas fa-store"></i> Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html"><i class="fas fa-box-open"></i> Orders</a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search products">
+                <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+
+            <!-- Quick Links -->
+            <div class="ms-3">
+                <a href="cart.html" class="btn btn-outline-light me-2 "><i class="fas fa-shopping-cart"></i></a>
+                <a href="login.html" class="btn btn-outline-light"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+     <!-- Support/FAQ Section -->
+     <div class="support-container">
+        <h1>Help & Support</h1>
+
+        <!-- FAQ Search Bar -->
+        <div class="faq-search">
+            <input type="text" placeholder="Search for answers...">
+            <button>Search</button>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I track my order?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can track your order by logging into your account and visiting the "Orders" section. You will receive a tracking number via email once your order is shipped.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is your return policy?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We offer a 30-day return policy for most items. Please ensure the product is unused and in its original packaging. Visit the "Returns" section in your account to initiate a return.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How can I contact customer support?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can contact our customer support team via email at support@ovaz.com or call us at +1-800-123-4567. We are available 24/7 to assist you.</p>
+                </div>
+            </div>
+
+            <!-- Add more FAQ items here -->
+        </div>
+
+        <!-- Support Links -->
+        <div class="support-links">
+            <a href="mailto:support@ovaz.com">Email Support</a>
+            <a href="tel:+18001234567">Call Support</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Ovaz. All rights reserved.</p>
+        <a href="home.html">Back to Home</a>
+        <a href="shop.html">Back to Shop</a>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/help.js"></script>
+
+</body>
+</html>        

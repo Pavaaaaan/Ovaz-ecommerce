@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ovaz Home Screen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="home.html">Ovaz</a>
+      
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html"><i class="fas fa-store"></i> Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link protected-link" href="orders.html"><i class="fas fa-box-open"></i> Orders</a>
+              </li>
+              <li class="nav-item">
+              </li>
+            </ul>
+      
+            <form class="d-flex" id="searchForm">
+                <input class="form-control me-2" type="search" id="searchInput" placeholder="Search products">
+                <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+              </form>
+      
+            <div class="ms-3" id="authButtons">
+              <!-- Buttons added dynamically -->
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <script>
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        const authButtons = document.getElementById('authButtons');
+      
+        if (user) {
+          authButtons.innerHTML = `
+            <button class="btn btn-outline-light me-2" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
+            <button class="btn btn-outline-light me-2" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+            <button class="btn btn-outline-danger me-2" onclick="logout()">Logout</button>
+            <button class="btn btn-outline-secondary" onclick="location.href='settings.html'"><i class="fas fa-cog"></i></button>
+          `;
+        } else {
+          authButtons.innerHTML = `
+            <a href="login.html" class="btn btn-outline-light me-2"><i class="fas fa-user"></i> Login</a>
+          `;
+        }
+      
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          location.href = "login.html";
+        }
+      
+        document.querySelectorAll('.protected-link').forEach(link => {
+          link.addEventListener('click', function (e) {
+            if (!user) {
+              e.preventDefault();
+              alert('Please log in to access this page.');
+              window.location.href = 'login.html';
+            }
+          });
+        });
+
+            document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent page reload
+
+            const query = document.getElementById('searchInput').value.trim();
+
+            if (!query) return;
+
+            // Send search request to backend
+            const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`);
+            const results = await response.json();
+
+            // Display results (for now, console.log it)
+            console.log(results);
+
+            // You can update the DOM here to show products in a grid/list
+        });
+      </script>
+      
+          <!-- Improved Carousel Structure -->
+    <div class="carousel">
+        <div class="slide active">
+            <div class="slide-inner">
+                <img src="images/promo4.avif" alt="Promotion 1">
+                <div class="caption">40% Off on Men's Clothing!</div>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slide-inner">
+                <img src="images/promo02.jpg" alt="Promotion 2">
+                <div class="caption">New Arrivals in Women's clothing</div>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slide-inner">
+                <img src="images/promo03.jpg" alt="Promotion 3">
+                <div class="caption">Free Shipping on Orders Over 2999</div>
+            </div>
+        </div>
+        
+        <!-- Carousel Navigation Controls -->
+        <div class="carousel-arrows">
+            <div class="carousel-arrow" id="prevSlide">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="carousel-arrow" id="nextSlide">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        
+        <div class="carousel-controls">
+            <div class="carousel-dot active" data-slide="0"></div>
+            <div class="carousel-dot" data-slide="1"></div>
+            <div class="carousel-dot" data-slide="2"></div>
+        </div>
+    </div>
+   
+    <section class="categories">
+        <h2>Featured Categories</h2>
+        <div class="category-grid">
+            <a href="mens.html" class="category-card">
+                <img src="images/mens-clothing.jpg" alt="Men's Clothing">
+                <p>Men's Clothing</p>
+            </a>
+            <a href="womens.html" class="category-card">
+                <img src="images/womens-clothing.jpg" alt="Women's Clothing">
+                <p>Women's Clothing</p>
+            </a>
+            <a href="accessories.html" class="category-card">
+                <img src="images/accessories.jpg" alt="Accessories">
+                <p>Accessories</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3>Ovaz Support</h3>
+                <button class="chatbot-close" id="chatbotClose">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    Hello! I'm your Ovaz assistant. How can I help you today?
+                </div>
+                <div class="message bot-message">
+                    Here are some things I can help with:<br>
+                    • Track your order<br>
+                    • Product information<br>
+                    • Returns & refunds<br>
+                    • Account issues<br>
+                    Just type your question below!
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message here...">
+                <button id="chatbotSend"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-container" style="display: flex; justify-content: space-between; padding: 40px 10%; background-color: #222; color: white;">
+        <!-- Categories Section -->
+        <div class="footer-column">
+            <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">CATEGORIES</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 10px;"><a href="womens.html" style="color: #ccc; text-decoration: none;">Women</a></li>
+                <li style="margin-bottom: 10px;"><a href="mens.html" style="color: #ccc; text-decoration: none;">Men</a></li>
+                <li style="margin-bottom: 10px;"><a href="accessories.html" style="color: #ccc; text-decoration: none;">Accessories</a></li>
+            </ul>
+        </div>
+        
+        <!-- Help Section -->
+        <div class="footer-column">
+            <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">HELP</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 10px;"><a href="orders.html" style="color: #ccc; text-decoration: none;">Track Order</a></li>
+              
+                <li style="margin-bottom: 10px;"><a href="contact.html" style="color: #ccc; text-decoration: none;">Contact Us</a></li>
+                <li style="margin-bottom: 10px;"><a href="help.html" style="color: #ccc; text-decoration: none;">FAQs</a></li>
+            </ul>
+        </div>
+        
+        <!-- Get in Touch Section -->
+        <div class="footer-column">
+            <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">GET IN TOUCH</h4>
+            <p style="color: #ccc; margin-bottom: 20px; max-width: 300px;">
+                Any questions? Let us know in store at 8th floor, cambridge road, Bengaluru, Karnataka 560008 or call us on +1800 291298
+            </p>
+            <div style="display: flex; gap: 15px;">
+                <a href="https://www.facebook.com/login/" style="color: #ccc;"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/accounts/login/?hl=en" style="color: #ccc;"><i class="fab fa-instagram"></i></a>
+                <a href="https://in.pinterest.com/login/" style="color: #ccc;"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+        </div>
+        
+        <!-- Newsletter Section -->
+        <div class="footer-column">
+            <h4 style="margin-bottom: 20px; font-size: 18px; font-weight: 600;">NEWSLETTER</h4>
+            <form>
+                <div style="margin-bottom: 15px;">
+                    <input type="email" placeholder="email@example.com" style="width: 100%; padding: 10px; background: transparent; border: none; border-bottom: 1px solid #666; color: #ccc;">
+                </div>
+                <div>
+                    <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold;">SUBSCRIBE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Copyright Section -->
+    <div style="text-align: center; padding: 20px; background-color: #1a1a1a; color: #888;">
+        <p>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Made with Love by Ovaz
+        </p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="scripts/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - Ovaz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/settings.css">
+ 
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-bold" href="home.html">Ovaz</a>
+      
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="shop.html"><i class="fas fa-store"></i> Shop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link protected-link" href="orders.html"><i class="fas fa-box-open"></i> Orders</a>
+              </li>
+              <li class="nav-item">
+               
+              </li>
+            </ul>
+      
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search products">
+              <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+      
+            <div class="ms-3" id="authButtons">
+              <!-- Buttons added dynamically -->
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <script>
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        const authButtons = document.getElementById('authButtons');
+      
+        if (user) {
+          authButtons.innerHTML = `
+            <button class="btn btn-outline-light me-2" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i></button>
+            <button class="btn btn-outline-light me-2" onclick="location.href='profile.html'"><i class="fas fa-user"></i></button>
+            <button class="btn btn-outline-danger me-2" onclick="logout()">Logout</button>
+            <button class="btn btn-outline-secondary" onclick="location.href='settings.html'"><i class="fas fa-cog"></i></button>
+          `;
+        } else {
+          authButtons.innerHTML = `
+            <a href="login.html" class="btn btn-outline-light me-2"><i class="fas fa-user"></i> Login</a>
+          `;
+        }
+      
+        function logout() {
+          sessionStorage.removeItem('currentUser');
+          location.href = "login.html";
+        }
+      
+        document.querySelectorAll('.protected-link').forEach(link => {
+          link.addEventListener('click', function (e) {
+            if (!user) {
+              e.preventDefault();
+              alert('Please log in to access this page.');
+              window.location.href = 'login.html';
+            }
+          });
+        });
+      </script>
+
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>Account Settings</h1>
+            <p>Manage your account preferences and privacy settings</p>
+        </div>
+
+        <!-- Notification Preferences Section -->
+        <div class="settings-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><i class="fas fa-bell"></i> Notification Preferences</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label>Email Notifications</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="email-orders" checked> Order updates
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="email-promotions" checked> Promotions and offers
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="email-newsletter"> Newsletter
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>SMS Notifications</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sms-orders" checked> Order updates
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="sms-promotions"> Promotions and offers
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Push Notifications</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="push-orders" checked>
+                            Order updates
+                            <span class="toggle-switch">
+                                <input type="checkbox" id="push-orders-toggle" >
+                                
+                            </span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="push-promotions">
+                            Promotions
+                            <span class="toggle-switch">
+                                <input type="checkbox" id="push-promotions-toggle">                         
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="save-notifications">
+                    <span id="notification-btn-text">Save Notification Settings</span>
+                    <span id="notification-spinner" class="spinner" style="display: none;"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Language & Currency Section -->
+        <div class="settings-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><i class="fas fa-globe"></i> Language & Currency</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language">
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                            <option value="hi">Hindi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency</label>
+                        <select id="currency">
+                            <option value="USD">US Dollar ($)</option>
+                            <option value="EUR">Euro (€)</option>
+                            <option value="GBP">British Pound (£)</option>
+                            <option value="INR" selected>Indian Rupee (₹)</option>
+                            <option value="JPY">Japanese Yen (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="save-language">
+                    <span id="language-btn-text">Save Language & Currency</span>
+                    <span id="language-spinner" class="spinner" style="display: none;"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Linked Accounts Section -->
+        <div class="settings-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><i class="fas fa-link"></i> Linked Accounts</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div id="linked-accounts-list">
+                    <!-- Accounts will be loaded dynamically -->
+                </div>
+
+                <button class="btn btn-primary" id="link-account-btn">
+                    <i class="fas fa-plus"></i> Link New Account
+                </button>
+            </div>
+        </div>
+
+        <!-- Payment Methods Section -->
+        <div class="settings-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><i class="far fa-credit-card"></i> Payment Methods</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div id="payment-methods-list">
+                    <!-- Payment methods will be loaded dynamically -->
+                </div>
+
+                <button class="btn btn-primary" id="add-payment-btn">
+                    <i class="fas fa-plus"></i> Add Payment Method
+                </button>
+            </div>
+        </div>
+
+        <!-- Privacy Settings Section -->
+        <div class="settings-section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><i class="fas fa-lock"></i> Privacy Settings</h2>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label>Account Visibility</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="radio" name="visibility" value="public" checked> Public
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="radio" name="visibility" value="private"> Private
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Data Sharing</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="personalized-ads"> Allow personalized ads
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="share-data" checked> Share data with partners for better recommendations
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Search Visibility</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="search-visibility" checked> Allow search engines to link to my profile
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Delete Account</label>
+                    <p>This will permanently delete your account and all associated data.</p>
+                    <button class="btn btn-danger" id="delete-account-btn">
+                        <i class="fas fa-trash-alt"></i> Delete My Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Account Modal -->
+    <div class="modal" id="link-account-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Link New Account</h3>
+                <button class="modal-close" onclick="closeModal('link-account-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select account type</label>
+                    <select id="account-type" class="form-control">
+                        <option value="google">Google</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="apple">Apple</option>
+                        <option value="twitter">Twitter</option>
+                    </select>
+                </div>
+                <p class="modal-info">You'll be redirected to the selected service to authenticate.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="linkAccount()">Continue</button>
+                <button class="btn cancel-button" onclick="closeModal('link-account-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Method Modal -->
+    <div class="modal" id="add-payment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Payment Method</h3>
+                <button class="modal-close" onclick="closeModal('add-payment-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" id="card-expiry" placeholder="MM/YY">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" id="card-cvv" placeholder="123">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" id="card-name" placeholder="John Doe">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="addPaymentMethod()">Add Payment Method</button>
+                <button class="btn cancel-button" onclick="closeModal('add-payment-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal" id="delete-account-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Your Account</h3>
+                <button class="modal-close" onclick="closeModal('delete-account-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <p>All your data will be permanently removed from our servers.</p>
+                <div class="form-group">
+                    <label for="delete-confirm">Type "DELETE" to confirm</label>
+                    <input type="text" id="delete-confirm" placeholder="DELETE">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="confirmDeleteAccount()" id="confirm-delete-btn" disabled>
+                    <i class="fas fa-trash-alt"></i> Delete Account Permanently
+                </button>
+                <button class="btn cancel-button" onclick="closeModal('delete-account-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Ovaz. All rights reserved.</p>
+        <a href="help.html">Help & Support</a>
+        <a href="contact.html">Contact Us</a>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/settings.js"></script>
+
+</body>
+</html>
